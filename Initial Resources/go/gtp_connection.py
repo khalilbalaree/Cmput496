@@ -124,7 +124,7 @@ class GtpConnection():
         stdout.write('? {}\n\n'.format(error_msg))
         stdout.flush()
 
-    def respond(self, response):
+    def respond(self, response=''):
         """ Send response to stdout """
         stdout.write('= {}\n\n'.format(response))
         stdout.flush()
@@ -197,7 +197,12 @@ class GtpConnection():
         board_color = args[0].lower()
         color = color_to_int(board_color)
         moves = GoBoardUtil.generate_legal_moves(self.board, color)
-        self.respond(moves)
+        gtp_moves = []
+        for move in moves:
+            coords = point_to_coord(move, self.board.size)
+            gtp_moves.append(format_point(coords))
+        sorted_moves = ' '.join(sorted(gtp_moves))
+        self.respond(sorted_moves)
 
     def play_cmd(self, args):
         """

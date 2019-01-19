@@ -11,7 +11,7 @@ The board uses a 1-dimensional representation with padding
 
 import numpy as np
 from board_util import GoBoardUtil, BLACK, WHITE, EMPTY, BORDER, \
-                       PASS, is_black_white, coord_to_point, where1d
+                       PASS, is_black_white, coord_to_point, where1d, MAXSIZE
 
 class SimpleGoBoard(object):
 
@@ -28,7 +28,8 @@ class SimpleGoBoard(object):
         board_copy = self.copy()
         # Try to play the move on a temporary copy of board
         # This prevents the board from being messed up by the move
-        legal = board_copy.play_move(point, color)
+        legal = board_copy.play_move_gomoku(point, color)
+        # legal = board_copy.play_move(point, color)
         return legal
 
     def get_empty_points(self):
@@ -42,8 +43,11 @@ class SimpleGoBoard(object):
         """
         Creates a Go board of given size
         """
-        assert 2 <= size <= 7
+        assert 2 <= size <= MAXSIZE
         self.reset(size)
+        #added for assign1
+        self.lastPoint = None
+        self.lastColor = None
 
     def reset(self, size):
         """
@@ -196,6 +200,8 @@ class SimpleGoBoard(object):
             self.ko_recapture = single_captures[0]
         self.current_player = GoBoardUtil.opponent(color)
         return True
+        
+
 
     def neighbors_of_color(self, point, color):
         """ List of neighbors of point of given color """
@@ -215,3 +221,80 @@ class SimpleGoBoard(object):
                 point - self.NS + 1, 
                 point + self.NS - 1, 
                 point + self.NS + 1]
+
+    """
+    ======================================================================
+    Methods added for assignment1
+    ======================================================================
+    """
+    def play_move_gomoku(self, point, color):
+        assert is_black_white(color)
+        if point == PASS: 
+            return False
+        if self.board[point] != EMPTY:
+            return False
+        self.board[point] = color
+        self.lastPoint = point
+        self.lastColor = color
+        return True
+       
+    
+    def check_win(self):
+        # check horizental
+        point = self.lastPoint
+        color = self.lastColor
+        if point == None or color == None:
+            return False
+        temp = point - 1
+        horizental_count = 1
+        while (temp != BORDER and self.board[temp] == color):
+            horizental_count += 1
+            temp -= 1
+        temp = point + 1
+        while (temp != BORDER and self.board[temp] == color):
+            horizental_count += 1
+            temp += 1
+        # check vertical
+        temp = point - self.NS
+        vertical_count = 1
+        while (temp != BORDER and self.board[temp] == color):
+            vertical_count += 1
+            temp -= self.NS
+        temp = point + self.NS
+        while (temp != BORDER and self.board[temp] == color):
+            vertical_count += 1
+            temp += self.NS
+        # check left diagonal
+        temp = point - self.NS + 1
+        left_diag_count = 1
+        while (temp != BORDER and self.board[temp] == color):
+            left_diag_count += 1
+            temp = temp - self.NS + 1
+        temp = point + self.NS - 1
+        while (temp != BORDER and self.board[temp] == color):
+            left_diag_count += 1
+            temp = temp + self.NS - 1
+        # check right diagnal
+        temp = point - self.NS - 1
+        right_diag_count = 1
+        while (temp != BORDER and self.board[temp] == color):
+            right_diag_count += 1
+            temp = temp - self.NS - 1
+        temp = point + self.NS + 1
+        while (temp != BORDER and self.board[temp] == color):
+            right_diag_count += 1
+            temp = temp + self.NS + 1
+        if (horizental_count >= 5 or vertical_count >= 5 or left_diag_count >= 5 or right_diag_count >= 5):
+            return color
+        else:
+            return False
+
+    def check_draw(self):
+        # print(self.get_empty_points().size)
+        if self.get_empty_points().size == 0 and not self.check_win():
+            return True
+        else:
+            return False
+    
+
+

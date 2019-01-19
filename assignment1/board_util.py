@@ -99,14 +99,12 @@ class GoBoardUtil(object):
         color : {'b','w'}
             the color to generate the move for.
         """
-        moves = board.get_empty_positions(color)
-        gtp_moves = []
+        moves = board.get_empty_points()
+        legal_moves = []
         for move in moves:
             if board.is_legal(move, color):
-                coords = point_to_coord(point)
-                gtp_moves.append(GoBoardUtil.format_point(coords))
-        sorted_moves = ' '.join(sorted(gtp_moves))
-        return sorted_moves
+                legal_moves.append(move)
+        return legal_moves
             
     @staticmethod       
     def generate_random_move(board, color, use_eye_filter):
