@@ -263,7 +263,7 @@ class GtpConnection():
 
     def has_play_color_error(self, board_color, args):
         if not (board_color == "b" or board_color == "w"):
-            self.respond("Illegal Move: {}".format("\"play " + args[0] + " " + args[1] + "\" wrong color"))
+            self.respond("illegal Move: {}".format("\"" + args[0] + "\" wrong color"))
             return True
         return False
     
@@ -303,14 +303,14 @@ class GtpConnection():
         #check for coordinate
         coord = self.has_play_coordinate_error(args)
         if not coord:
-            self.respond("Illegal Move: {}".format("\"play " + args[0] + " " + args[1] + "\" wrong coordinate"))
+            self.respond("illegal Move: {}".format("\"" + args[1] + "\" wrong coordinate"))
             return          
         else: 
             move = coord_to_point(coord[0],coord[1], self.board.size)
         #check for occupied
         v = self.board.play_move_gomoku(move, color)
         if not v:
-            self.respond("Illegal Move: {}".format("\"play " + args[0] + " " + args[1] + "\" occupied"))
+            self.respond("illegal Move: {}".format("\"" + args[1] + "\" occupied"))
             return
         else:
             self.debug_msg("Move: {}\nBoard:\n{}\n".
