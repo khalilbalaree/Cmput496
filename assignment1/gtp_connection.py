@@ -207,14 +207,13 @@ class GtpConnection():
         """ Implement this function for Assignment 1 """
         # Done for assignment1
         if self.board.check_win():
-            self.respond([])
+            self.respond()
             return
         gtp_moves = []
         for p in self.board.get_empty_points():
             gtp_moves.append(format_point(point_to_coord(p, self.board.size)))
         sorted_moves = ' '.join(sorted(gtp_moves))
         self.respond(sorted_moves)
-        return
 
     def gogui_rules_side_to_move_cmd(self, args):
         """ We already implemented this function for Assignment 1 """
@@ -254,13 +253,6 @@ class GtpConnection():
         else:
             self.respond("unknown")
 
-    # def has_play_arg_error(self, arg, command):
-    #     # check wrong arguments in play for assignment1
-    #     if len(arg) != 2:
-    #         self.respond("illegal move: {}".format("\"" + command.strip("\n") + "\"" + " wrong number of arguments\n"))
-    #         return True
-    #     return False
-
     def has_play_color_error(self, board_color, args):
         if not (board_color == "b" or board_color == "w"):
             self.respond("illegal Move: {}".format("\"" + args[0] + "\" wrong color"))
@@ -285,7 +277,7 @@ class GtpConnection():
             return False
         return row, col
 
-    def occupied(self,):
+    def occupied(self):
         pass
   
 
@@ -294,28 +286,33 @@ class GtpConnection():
         """
         play a move args[1] for given color args[0] in {'b','w'}
         """
-        board_color = args[0].lower()
-        # check for color
-        if self.has_play_color_error(board_color, args):
-            return
-        board_move = args[1]
-        color = color_to_int(board_color)     
-        #check for coordinate
-        coord = self.has_play_coordinate_error(args)
-        if not coord:
-            self.respond("illegal Move: {}".format("\"" + args[1] + "\" wrong coordinate"))
-            return          
-        else: 
-            move = coord_to_point(coord[0],coord[1], self.board.size)
-        #check for occupied
-        v = self.board.play_move_gomoku(move, color)
-        if not v:
-            self.respond("illegal Move: {}".format("\"" + args[1] + "\" occupied"))
-            return
-        else:
-            self.debug_msg("Move: {}\nBoard:\n{}\n".
-                            format(board_move, self.board2d()))
-        self.respond()
+        # self.respond("error .....")
+        try:
+            board_color = args[0].lower()
+            # check for color
+            if self.has_play_color_error(board_color, args):
+                return
+            board_move = args[1]
+            color = color_to_int(board_color)     
+            #check for coordinate
+            coord = self.has_play_coordinate_error(args)
+            # coord = move_to_coord(args, self.board.size)
+            if not coord:
+                self.respond("illegal Move: {}".format("\"" + args[1] + "\" wrong coordinate"))
+                return          
+            else: 
+                move = coord_to_point(coord[0],coord[1], self.board.size)
+            #check for occupied
+            v = self.board.play_move_gomoku(move, color)
+            if not v:
+                self.respond("illegal Move: {}".format("\"" + args[1] + "\" occupied"))
+                return
+            else:
+                self.debug_msg("Move: {}\nBoard:\n{}\n".
+                                format(board_move, self.board2d()))
+            self.respond()
+        except Exception as e:
+            self.respond('Error: {}'.format(str(e)))
 
 
     def genmove_cmd(self, args):
@@ -404,7 +401,7 @@ def format_point(move):
     """
     Return move coordinates as a string such as 'a1', or 'pass'.
     """
-    column_letters = "abcdefghjklmnopqrstuvwxyz"
+    column_letters = "ABCDEFGHJKLMNOPQRSTUVWXYZ"
     if move == PASS:
         return "pass"
     row, col = move
