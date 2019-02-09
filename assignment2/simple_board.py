@@ -484,7 +484,7 @@ class SimpleGoBoard(object):
 
 
     #-----------------------------------------------------------------------
-    # Optimial
+    # Optimial using heuristic
     #-----------------------------------------------------------------------
     def check_in_line_with_empty(self, point, shift, color, num_of_points, check_empty1, check_empty2):
         count = 1
@@ -519,7 +519,6 @@ class SimpleGoBoard(object):
     def check_in_line_with_empty_permit(self, point, shift, color):
         pass
 
-        
 
 
     def try_to_block_oppoent_immediate_win(self, color):
@@ -536,19 +535,22 @@ class SimpleGoBoard(object):
 
 
     def heuristic_search_move(self, player):
-        #try to play first
+        # Should figure out the order!!!
         i = self.try_to_play_immediate_win(player)
         if i:
             return i
         j = self.try_to_block_oppoent_immediate_win(player)
         if j:
-            return j
-        k = self.try_play_intersection(player)
+            return j  
+        n = self.win_in_2_move(player)
+        if n:
+            return n  
+        k = self.win_in_2_move(GoBoardUtil.opponent(player))
         if k:
-            return k       
-        l = self.win_in_2_move(player)
-        if l:
-            return l   
+            return k
+        m = self.try_play_intersection(player)
+        if m:
+            return m       
         return False
 
     def try_play_intersection(self, color):
@@ -618,7 +620,7 @@ class SimpleGoBoard(object):
         EMPTY_POINT = where1d(self.board == EMPTY)
         for point in EMPTY_POINT:
             if self.check_in_line_with_empty(point, 1, color, 4, False, True) or self.check_in_line_with_empty(point, self.NS, color, 4, False, True) or self.check_in_line_with_empty(point, self.NS + 1, color, 4, False, True) or self.check_in_line_with_empty(point, self.NS - 1, color, 4, False, True):
-                # print(str(color) + " win in 2 move")
+                print(str(color) + " win in 2 move")
                 return point
         return False
 
