@@ -19,12 +19,12 @@ class solver():
         return result, move
 
     def alphabeta(self, state, alpha, beta, depth, proof_tree_depth_zero):
-        result = self.table.lookup(state.code())
-        # check on table
-        if result != None:
-            # print(str(GoBoardUtil.get_twoD_board(state)))
-            # print(result)
-            return result
+        # result = self.table.lookup(state.code())
+        # # check on table
+        # if result != None:
+        #     # print(str(GoBoardUtil.get_twoD_board(state)))
+        #     # print(result)
+        #     return result
         if depth == 0 or state.end_of_game():    
             result = state.staticallyEvaluateForToPlay()    
             return self.store_result(state, result)
@@ -48,13 +48,13 @@ class solver():
             if value > alpha:
                 if (depth == self.depth):
                     proof_tree_depth_zero[value] = m
-                self.store_result(state, result)
+                # self.store_result(state, result)
                 alpha = value
             state.undo_move()
             if value >= beta: 
                 if (depth == self.depth):
                     proof_tree_depth_zero[value] = m
-                self.store_result(state, result)
+                # self.store_result(state, result)
                 return beta   # or value in failsoft (later)
         return alpha
 
