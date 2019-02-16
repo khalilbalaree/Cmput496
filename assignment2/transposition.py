@@ -16,9 +16,10 @@ class TranspositionTable(object):
     def __repr__(self):
         return self.table.__repr__()
         
-    def store(self, code, score):
-        self.table[code] = score
+    def store(self, code, score, depth, is_what):
+        key = (code, depth, is_what)
+        self.table[key] = score
     
     # Python dictionary returns 'None' if key not found by get()
-    def lookup(self, code):
-        return self.table.get(code)
+    def lookup(self, code, depth, is_what):
+        return self.table.get((code, depth, is_what))

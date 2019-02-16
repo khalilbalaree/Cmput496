@@ -54,7 +54,8 @@ class GtpConnection():
             "gogui-rules_final_result": self.gogui_rules_final_result_cmd,
             "gogui-analyze_commands": self.gogui_analyze_cmd,
             "solve": self.solve_cmd,
-            "timelimit": self.timelimit_cmd
+            "timelimit": self.timelimit_cmd,
+            "code": self.show_code
         }
 
         # used for argument checking
@@ -260,6 +261,9 @@ class GtpConnection():
         """
         board_color = args[0].lower()
         color = color_to_int(board_color)
+
+        self.board.current_player = color
+
         game_end, winner = self.board.check_game_end_gomoku()
         if game_end:
             if winner == color:
@@ -267,31 +271,43 @@ class GtpConnection():
             else:
                 self.respond("resign")
             return
-        move = self.go_engine.get_move(self.board, color)
-        if move == PASS:
-            self.respond("pass")
-            return
-        move_coord = point_to_coord(move, self.board.size)
-        move_as_string = format_point(move_coord)
-        if self.board.is_legal_gomoku(move, color):
-            self.board.play_move_gomoku(move, color)
-            self.respond(move_as_string)
+
+        s = solver(self.board.copy(), False)
+        result, move = s.call_alpha_beta()
+        if result != -1:
+            # print(move)
+            self.board.play_move_gomoku(int(move), color)
+            self.respond(format_point(point_to_coord(move, self.board.size)))
         else:
-            self.respond("illegal move: {}".format(move_as_string))
+            move = self.go_engine.get_move(self.board, color)
+            self.board.play_move_gomoku(move, color)
+            self.respond(move)
+      
+        # move = self.go_engine.get_move(self.board, color)
+        # if move == PASS:
+        #     self.respond("pass")
+        #     return
+        # move_coord = point_to_coord(move, self.board.size)
+        # move_as_string = format_point(move_coord)
+        # if self.board.is_legal_gomoku(move, color):
+        #     self.board.play_move_gomoku(move, color)
+        #     self.respond(move_as_string)
+        # else:
+        #     self.respond("illegal move: {}".format(move_as_string))
 
     def solve_cmd(self,args):
-        s = solver(self.board.copy())
-        # signal.signal(signal.SIGALRM, handler)
-        # signal.alarm(self.second)
-        # try:
+        s = solver(self.board.copy(), False)
+        signal.signal(signal.SIGALRM, handler)
+        signal.alarm(self.second)
         # start = time.process_time()
-        result, move = s.call_alpha_beta()
+        try:
+            result, move = s.call_alpha_beta()
+            move = format_point(point_to_coord(move, self.board.size))
+        except Exception:
+            result = None
+            move = None
         # self.respond("Searching time: " + str(time.process_time()-start))
-        # result, tree = s.call_negamax()
-        move = format_point(point_to_coord(move, self.board.size))
-        # except Exception:
-        #     result = None
-        # signal.alarm(0)
+        signal.alarm(0)
         player_color = "b" if self.board.current_player == BLACK else "w"
         opponent_color = "w" if self.board.current_player == BLACK else "b"
 
@@ -300,11 +316,15 @@ class GtpConnection():
         elif result == -1:
             self.respond(opponent_color)
         elif result == 0:
-            self.respond("draw")
+            self.respond("draw " + move)
         elif result == None:
             self.respond("unknow")
         else: 
             self.respond("ERROR")
+
+
+    def show_code(self, args):
+        self.respond(self.board.code())
     
     
     def timelimit_cmd(self, args):

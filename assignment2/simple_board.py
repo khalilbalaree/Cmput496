@@ -10,6 +10,7 @@ The board uses a 1-dimensional representation with padding
 """
 
 import numpy as np
+import random
 from board_util import GoBoardUtil, BLACK, WHITE, EMPTY, BORDER, \
                        PASS, is_black_white, coord_to_point, where1d, \
                        MAXSIZE, NULLPOINT
@@ -476,7 +477,7 @@ class SimpleGoBoard(object):
             for color in range(3):
                 code[i][color] = index
                 index += 1
-
+        # print(code)
         return code
 
     def set_draw_winner(self, color):
@@ -516,9 +517,8 @@ class SimpleGoBoard(object):
         else:
             return count >= num_of_points
     
-    def check_in_line_with_empty_permit(self, point, shift, color):
+    def check_in_line_with_count_color(self, point, shift, color):
         pass
-
 
 
     def try_to_block_oppoent_immediate_win(self, color):
@@ -533,6 +533,22 @@ class SimpleGoBoard(object):
                 return point
         return False
 
+    def try_to_play_quick_list(self, color):
+        # .oo..
+        # .o.o.
+        # .o.
+        point_list = []
+        EMPTY_POINT = where1d(self.board == EMPTY)
+        for point in EMPTY_POINT:
+            if self.check_in_line_with_empty(point, 1, color, 3, True, True) or self.check_in_line_with_empty(point, self.NS , color, 3, True, True) or self.check_in_line_with_empty(point, self.NS+1, color, 3, True, True) or self.check_in_line_with_empty(point, self.NS-1, color, 3, True, True):
+                point_list.append(point)
+        for point in EMPTY_POINT:
+            if self.check_in_line_with_empty(point, 1, color, 2, True, True) or self.check_in_line_with_empty(point, self.NS , color, 2, True, True) or self.check_in_line_with_empty(point, self.NS+1, color, 2, True, True) or self.check_in_line_with_empty(point, self.NS-1, color, 2, True, True):
+                point_list.append(point)
+        if len(point_list) == 0:
+            return EMPTY_POINT
+        return point_list
+    
 
     def heuristic_search_move(self, player):
         # Should figure out the order!!!
@@ -620,7 +636,7 @@ class SimpleGoBoard(object):
         EMPTY_POINT = where1d(self.board == EMPTY)
         for point in EMPTY_POINT:
             if self.check_in_line_with_empty(point, 1, color, 4, False, True) or self.check_in_line_with_empty(point, self.NS, color, 4, False, True) or self.check_in_line_with_empty(point, self.NS + 1, color, 4, False, True) or self.check_in_line_with_empty(point, self.NS - 1, color, 4, False, True):
-                print(str(color) + " win in 2 move")
+                # print(str(color) + " win in 2 move")
                 return point
         return False
 
