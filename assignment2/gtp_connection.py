@@ -261,42 +261,36 @@ class GtpConnection():
         """
         board_color = args[0].lower()
         color = color_to_int(board_color)
-
         self.board.current_player = color
 
-        game_end, winner = self.board.check_game_end_gomoku()
-        if game_end:
-            if winner == color:
-                self.respond("pass")
-            else:
-                self.respond("resign")
+        if len(self.board.get_empty_points()) == 0:
+            self.respond("pass")
             return
 
-        s = solver(self.board.copy(), False)
-        result, move = s.call_alpha_beta()
-        if result != -1:
-            # print(move)
+        signal.signal(signal.SIGALRM, handler)
+        signal.alarm(self.second)
+        s = solver(self.board.copy(), True)
+        try:
+            result, move = s.call_alpha_beta()
+        except Exception:
+            result = -1
+            move = None
+        signal.alarm(0)
+
+        if result != -1 and move != None:
             self.board.play_move_gomoku(int(move), color)
             self.respond(format_point(point_to_coord(move, self.board.size)))
         else:
-            move = self.go_engine.get_move(self.board, color)
-            self.board.play_move_gomoku(move, color)
-            self.respond(move)
-      
-        # move = self.go_engine.get_move(self.board, color)
-        # if move == PASS:
-        #     self.respond("pass")
-        #     return
-        # move_coord = point_to_coord(move, self.board.size)
-        # move_as_string = format_point(move_coord)
-        # if self.board.is_legal_gomoku(move, color):
-        #     self.board.play_move_gomoku(move, color)
-        #     self.respond(move_as_string)
-        # else:
-        #     self.respond("illegal move: {}".format(move_as_string))
+            self.random_move_gomoku(color)
+
+    def random_move_gomoku(self, color):
+        move = self.go_engine.get_move(self.board, color)
+        self.board.play_move_gomoku(move, color)
+        self.respond(format_point(point_to_coord(move, self.board.size)))
+    
 
     def solve_cmd(self,args):
-        s = solver(self.board.copy(), False)
+        s = solver(self.board.copy(), True)
         signal.signal(signal.SIGALRM, handler)
         signal.alarm(self.second)
         # start = time.process_time()
@@ -318,7 +312,7 @@ class GtpConnection():
         elif result == 0:
             self.respond("draw " + move)
         elif result == None:
-            self.respond("unknow")
+            self.respond("unknown")
         else: 
             self.respond("ERROR")
 

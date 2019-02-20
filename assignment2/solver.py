@@ -73,37 +73,6 @@ class solver():
         return result
 
 
-    # def call_negamax(self):
-    #     self.current_board.set_draw_winner(GoBoardUtil.opponent(self.current_board.current_player))
-    #     proof_tree = []
-    #     win = self.negamaxBoolean(self.current_board, self.depth, proof_tree)
-    #     if win:
-    #         return self.current_board.current_player, proof_tree
-    #     self.current_board.set_draw_winner(self.current_board.current_player)
-    #     if self.negamaxBoolean(self.current_board, self.depth, proof_tree):
-    #         return EMPTY,proof_tree
-    #     else:
-    #         return GoBoardUtil.opponent(self.current_board.current_player),proof_tree
-    #     # print(result)
-    #     # print(proof_tree[-1])
-
-
-    # def negamaxBoolean(self, state, depth, proof_tree):
-    #     result = self.table.lookup(state.code())
-    #     if result != None:
-    #         return result
-    #     if state.end_of_game() or depth == 0:
-    #         result = state.staticallyEvaluateForToPlay()
-    #         return self.store_result(state, result)
-    #     for m in state.get_empty_points():
-    #         # print(str(GoBoardUtil.get_twoD_board(state)))
-    #         state.play_move_gomoku_auto_change_player(m)
-    #         success = not self.negamaxBoolean(state, depth - 1, proof_tree)
-    #         state.undo_move()
-    #         if success:
-    #             proof_tree.append(m)
-    #             return self.store_result(state, True)
-        # return self.store_result(state, False)
 
 
 
