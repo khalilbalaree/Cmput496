@@ -262,7 +262,6 @@ class GtpConnection():
         board_color = args[0].lower()
         color = color_to_int(board_color)
         self.board.current_player = color
-
         if len(self.board.get_empty_points()) == 0:
             self.respond("pass")
             return
@@ -273,11 +272,11 @@ class GtpConnection():
         try:
             result, move = s.call_alpha_beta()
         except Exception:
-            result = -1
+            result = None
             move = None
         signal.alarm(0)
 
-        if result != -1 and move != None:
+        if result != -1 and move != None and result != None:
             self.board.play_move_gomoku(int(move), color)
             self.respond(format_point(point_to_coord(move, self.board.size)))
         else:
