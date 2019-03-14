@@ -17,7 +17,7 @@ class rules:
         n = self.win_in_2_move(self.player)
         if len(n) != 0:
             return n, "OpenFour"
-        k = self.win_in_2_move(GoBoardUtil.opponent(self.player))
+        k = self.block_open_four(self.player)
         if len(k) != 0:
             return k, "BlockOpenFour" 
         return None, "Random"
@@ -81,12 +81,64 @@ class rules:
     
 
     def win_in_2_move(self, color):
-        # .xxx..
-        # .x.xx.
-        result = []
         EMPTY_POINT = where1d(self.board == EMPTY)
+        patterns = {'-ooo.-' : 4, '-o.oo-' : 2, '-.ooo-' : 1, '-oo.o-' : 3}
         for point in EMPTY_POINT:
-            if self.check_in_line_with_empty(point, 1, color, 4, False, True) or self.check_in_line_with_empty(point, self.NS, color, 4, False, True) or self.check_in_line_with_empty(point, self.NS + 1, color, 4, False, True) or self.check_in_line_with_empty(point, self.NS - 1, color, 4, False, True):
-                # print(str(color) + " win in 2 move")
-                result.append(point)
-        return result
+            for pattern in patterns.keys():
+                for shift in [1, -1, self.NS, -self.NS, self.NS + 1, - self.NS - 1, self.NS - 1, - self.NS + 1]:
+                    isFound, result = self.check_pattern(pattern, point, color, shift, patterns[pattern])
+                    if isFound:
+                        return result
+        return []
+
+    def block_open_four(self, color):
+        EMPTY_POINT = where1d(self.board == EMPTY)
+        patterns = {'.x.xx.' : 0, '.xx.x.' : 0, '?.xxx..' : 1, '..xxx.?' : 0, '-.xxx.-': 1}
+        for point in EMPTY_POINT:
+            for pattern in patterns.keys():
+                for shift in [1, -1, self.NS, -self.NS, self.NS + 1, - self.NS - 1, self.NS - 1, - self.NS + 1]:
+                    isFound, result = self.check_pattern(pattern, point, color, shift, patterns[pattern])
+                    if isFound:
+                        return result
+        return []
+
+    def check_pattern(self, pattern, start_point, color, shift, start_index):
+        opponent = GoBoardUtil.opponent(color)
+        front = start_index
+        d = shift
+        p = start_point
+        result = []
+        for i in range(front):
+            p -= d
+            if pattern[i] == "x" and self.board[p] == opponent:
+                continue
+            elif pattern[i] == "o" and self.board[p] == color:
+                continue
+            elif pattern[i] == "." and self.board[p] == EMPTY:
+                result.append(p)
+                continue
+            elif pattern[i] == "-" and self.board[p] == EMPTY:
+                continue
+            elif pattern[i] == "?" and self.board[p] != color and self.board[p] != EMPTY:
+                continue  
+            else:
+                return False, None
+        p = start_point
+        for i in range(start_index + 1, len(pattern)):
+            p += d
+            if pattern[i] == "x" and self.board[p] == opponent:
+                continue
+            elif pattern[i] == "o" and self.board[p] == color:
+                continue
+            elif pattern[i] == "." and self.board[p] == EMPTY:
+                result.append(p)
+                continue
+            elif pattern[i] == "-" and self.board[p] == EMPTY:
+                continue
+            elif pattern[i] == "?" and self.board[p] != color and self.board[p] != EMPTY:
+                continue
+            else:
+                return False, None
+        result.append(start_point)    
+
+        return True, result

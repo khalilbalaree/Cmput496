@@ -434,7 +434,8 @@ class SimpleGoBoard(object):
     #----------------------------------------------------------------------------
     def simulate(self):
         i = 0
-        if not self.check_game_end_gomoku()[0]:
+        isEnd, winner = self.check_game_end_gomoku()
+        if not isEnd:
             allMoves = self.get_empty_points()
             random.shuffle(allMoves)
             for i in range(len(allMoves)):
@@ -447,10 +448,13 @@ class SimpleGoBoard(object):
                         return EMPTY, i 
                 else:      
                     return winner, i
+        else:
+            return winner, i
 
     def ruleBaseSimulation(self):
         i = 0
-        if not self.check_game_end_gomoku()[0]:
+        isEnd, winner = self.check_game_end_gomoku()
+        if not isEnd:
             while True:
                 moveFound = self.getSingleMoveByPolicy()
                 self.play_move_gomoku(moveFound, self.current_player)      
@@ -461,6 +465,8 @@ class SimpleGoBoard(object):
                         return EMPTY, i
                 else:
                     return winner, i
+        else:
+            return winner, i
 
     def getPolicyMoveList(self):
         moveFound, _type = rules(self.current_player, self.board, self.NS).policy_type_search_move()

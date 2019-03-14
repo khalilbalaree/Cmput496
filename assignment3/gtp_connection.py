@@ -283,11 +283,15 @@ class GtpConnection():
         if policyType == "random":
             self.policyType = 0
             self.go_engine.policyType(True)
+            self.respond("random")
         elif policyType == "rule_based":
             self.policyType = 1
             self.go_engine.policyType(False)
+            self.respond("rule_based")
         else:
             self.respond("random/rule_based")
+
+            
 
 
     def policy_moves_cmd(self, args):
