@@ -34,7 +34,7 @@ class Gomoku4(object):
     then select the one with best win-rate.
     playout could be either random or rule_based (i.e., uses pre-defined patterns) 
     """
-    def __init__(self, n_simualtions_per_move=8000, exploration=0.4):
+    def __init__(self, n_simualtions_per_move=1000, exploration=0.4):
         self.n_simualtions_per_move=n_simualtions_per_move
         self.exploration = exploration
         self.parent = None

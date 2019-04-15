@@ -1,20 +1,0 @@
-Script started on Thu Apr  4 20:17:04 2019
-[?1034hbash-3.2$ exitpython3 play.py [C[C[C[C[C[C[C[C[C[C[2Pcd assignment4[C[C[C[C[C[C[C[C[C[Ctar -xzf assignment4.tgz [C[C[C[C[C[C[C[C[C[Ccp assignment4.tgz /Users/zijunwu/Desktop
-bash-3.2$ cp assignment4.tgz /Users/zijunwu/Desktop[C[C[C[C[C[C[C[C[C[Cexit[Kpython3 play.py [C[C[C[C[C[C[C[C[C[C[2Pcd assignment4[C[C[C[C[C[C[C[C[C[Ctar -xzf assignment4.tgz [C[C[C[C[C[C[C[C[C[C[11Pcd assignment4[C[C[C[C[C[C[C[C[C[Ctar -xzf assignment4.tgz [C[C[C[C[C[C[C[C[C[Ccp assignment4.tgz /Users/zijunwu/Desktop[C[C[C[C[C[C[C[C[C[Cexit[Kpython3 play.py [C[C[C[C[C[C[C[C[C[Cls[Kcd assignment4[C[C[C[C[C[C[C[C[C[Ctar -xzf assignment4.tgz [C[C[C[C[C[C[C[C[C[Ccd /Users/zijunwu/Desktop
-bash-3.2$ cd /Users/zijunwu/Desktop[C[C[C[C[C[C[C[C[C[C[C[16@p assignment4.tgz[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Cexit[Kcp assignment4.tgz /Users/zijunwu/Desktop[C[C[C[C[C[C[C[C[C[Cexit[Kpython3 play.py [C[C[C[C[C[C[C[C[C[C[2Pcd assignment4[C[C[C[C[C[C[C[C[C[Ctar -xzf assignment4.tgz 
-bash-3.2$ tar -xzf assignment4.tgz [C[C[C[C[C[C[C[C[C[Ccd /Users/zijunwu/Desktop[C[C[C[C[C[C[C[C[C[C[C[16@p assignment4.tgz[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Cexit[Kpython3 play.py [C[C[C[C[C[C[C[C[C[C[2Pcd assignment4[C[C[C[C[C[C[C[C[C[Ctar -xzf assignment4.tgz [C[C[C[C[C[C[C[C[C[Ccp assignment4.tgz /Users/zijunwu/Desktop[C[C[C[C[C[C[C[C[C[Cexit[Kpython3 play.py [C[C[C[C[C[C[C[C[C[Cls[Kcd assignment4
-bash-3.2$ cd assignment4[C[C[C[C[C[C[C[C[C[Ctar -xzf assignment4.tgz [C[C[C[C[C[C[C[C[C[Ccd /Users/zijunwu/Desktop[C[C[C[C[C[C[C[C[C[C[C[16@p assignment4.tgz[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Cexit[Kpython3 play.py [C[C[C[C[C[C[C[C[C[Cexit[Kpython3 play.py [C[C[C[C[C[C[C[C[C[C[2Pcd assignment4[C[C[C[C[C[C[C[C[C[Ctar -xzf assignment4.tgz [C[C[C[C[C[C[C[C[C[C[11Pcd assignment4[C[C[C[C[C[C[C[C[C[Cpython3 play.py 
-E5
-F6
-D5
-G2
-C5
-D6
-F5
-G6
-B5
-player1 win 1 player2 win 0 draw 0
-bash-3.2$ exit
-exit
-
-Script done on Thu Apr  4 20:22:51 2019

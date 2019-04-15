@@ -79,8 +79,8 @@ class TreeNode(object):
                 self._children[move]._move = move
                 
                 #filter the best move
-                if is_root_child:
-                    self._children[move]._has_knowledge = board.policy_type_search_move(move)
+                # if is_root_child:
+                self._children[move]._has_knowledge = board.policy_type_search_move(move)
 
         self._expanded = True
 

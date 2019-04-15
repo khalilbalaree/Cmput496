@@ -488,7 +488,9 @@ class SimpleGoBoard(object):
         return False
 
     def block_open_four(self, color, point):
-        patterns = {'.x-xx-' : 0, '-x.xx-' : 2, '.xx-x-': 0,
+        patterns = {'.x-xx-' : 0,  
+                    '-x.xx-' : 2, 
+                    '.xx-x-': 0,
                     '.-xxx-?' : 0, '-.xxx-?' : 1, '?.xxx--' : 1, 
                     '-.xxx--': 1, 'x-x.x-x': 3}
         for pattern in patterns.keys():
@@ -507,7 +509,7 @@ class SimpleGoBoard(object):
             p -= d
             if not (0 <= p < len(self.board)):
                 return False
-            c = pattern[i]
+            c = pattern[front - i - 1]
             b = self.board[p]
             if c == "x" and b == opponent:
                 continue
