@@ -28,7 +28,7 @@ class solver():
         #     return result
             
         if depth == 0 or state.end_of_game():    
-            result = state.staticallyEvaluateForToPlay()    
+            result = state.staticallyEvaluateForToPlay()
             return self.store_result(state, result, depth, 0)
         
         #heristic endgame checking
